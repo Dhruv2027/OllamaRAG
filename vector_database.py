@@ -16,10 +16,9 @@ def main():
     parser.add_argument("--reset", action="store_true", help="Reset the database.")
     args = parser.parse_args()
     if args.reset:
-        print("✨ Clearing Database")
+        print("Clearing Database")
         clear_database()
 
-    # Create (or update) the data store.
     documents = load_documents()
     chunks = splitDocuments(documents)
     add_to_database(chunks)
@@ -46,7 +45,7 @@ def add_to_database(chunks: list[Document]):
 
     existing_items = db.get(include=[])
     existing_ids = set(existing_items["ids"])
-    print(f"Number of existing documents in DB: {len(existing_ids)}")
+    print(f"Number of documents in DB: {len(existing_ids)}")
     
     new_chunks = []
     for chunk in chunks_with_ids:
@@ -54,12 +53,12 @@ def add_to_database(chunks: list[Document]):
             new_chunks.append(chunk)
 
     if len(new_chunks):
-        print(f"👉 Adding new documents: {len(new_chunks)}")
+        print(f"Adding new documents: {len(new_chunks)}")
         new_chunk_ids = [chunk.metadata["id"] for chunk in new_chunks]
         db.add_documents(new_chunks, ids=new_chunk_ids)
         db.persist()
     else:
-        print("✅ No new documents to add")
+        print("No new documents to add")
 
 def calculate_chunk_ids(chunks):
     last_page_id = None
